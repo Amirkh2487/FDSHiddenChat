@@ -1,25 +1,20 @@
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.ext import (
+    Application,
+    CommandHandler,
+)
 
 from config import TOKEN
-from database import add_user
-
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
-    add_user(user.id)
-
-    await update.message.reply_text(
-        "👋 به FDSHiddenChat خوش اومدی."
-    )
+from handlers.start import start
+from handlers.message import anonymous_message
 
 
 def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("msg", anonymous_message))
 
-    print("Bot Started...")
+    print("FDSHiddenChat Started...")
     app.run_polling()
 
 
